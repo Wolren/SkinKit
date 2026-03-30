@@ -1,0 +1,16 @@
+[general]
+name=UI Themes+
+qgisMinimumVersion=3.16
+description=Full QGIS UI customisation: QSS editor with syntax highlighting, icon packs per preset, background images, font, opacity, icon size, safe reset
+version=0.1
+author=Wolren
+email=
+about=UI Themes+ is a comprehensive QGIS UI customisation plugin. Features: built-in theme gallery, QSS syntax-highlighted editor with colour swatches and validation, per-preset icon packs (QGIS default as baseline), background image for main window, font+opacity+toolbar icon size control, named presets, safe reset that restores the previous built-in theme.
+tracker=https://github.com/placeholder/UIThemesPlus/issues
+repository=https://github.com/placeholder/UIThemesPlus
+tags=style,qss,theme,ui,icon,font,dark,background,customise
+icon=icons/icon.png
+category=Plugins
+experimental=False
+deprecated=False
+changelog=0.1
