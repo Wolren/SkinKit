@@ -1,0 +1,50 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint:
+    name: Lint & Validate
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+
+      - name: Install ruff
+        run: pip install ruff
+
+      - name: Lint plugin source
+        run: ruff check SkinKit/
+
+      - name: Validate metadata.txt
+        run: |
+          if [ ! -f SkinKit/metadata.txt ]; then
+            echo "::error::SkinKit/metadata.txt not found"
+            exit 1
+          fi
+          grep -q "^name=" SkinKit/metadata.txt || echo "::warning::Missing 'name' in metadata.txt"
+          grep -q "^version=" SkinKit/metadata.txt || echo "::warning::Missing 'version' in metadata.txt"
+          grep -q "^qgisMinimumVersion=" SkinKit/metadata.txt || echo "::warning::Missing 'qgisMinimumVersion' in metadata.txt"
+          grep -q "^description=" SkinKit/metadata.txt || echo "::warning::Missing 'description' in metadata.txt"
+
+      - name: Check zip builds
+        run: python package.py
+
+      - name: Verify zip structure
+        run: |
+          unzip -l SkinKit-*.zip | head -5
+          unzip -l SkinKit-*.zip | grep -q "SkinKit/metadata.txt" \
+            && echo "metadata.txt found in zip root" \
+            || echo "::error::metadata.txt not at zip root"

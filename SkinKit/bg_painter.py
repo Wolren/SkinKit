@@ -1,9 +1,12 @@
-# -*- coding: utf-8 -*-
 """BackgroundPainter — apply a background image to QMainWindow via QPalette."""
-from qgis.PyQt.QtCore import QObject, QEvent, Qt
+
+from qgis.PyQt.QtCore import QEvent, QObject, Qt, QTimer
 from qgis.PyQt.QtGui import QBrush, QPalette, QPixmap
 
 BG_MODES = ["stretch", "tile", "center", "fit"]
+
+_RESIZE_DEBOUNCE_MS = 80
+
 
 class BackgroundPainter(QObject):
     def __init__(self, window):
@@ -12,12 +15,18 @@ class BackgroundPainter(QObject):
         self._pixmap = None
         self._mode = "stretch"
         self._original_palette = QPalette(window.palette())
+        self._resize_timer = QTimer()
+        self._resize_timer.setSingleShot(True)
+        self._resize_timer.setInterval(_RESIZE_DEBOUNCE_MS)
+        self._resize_timer.timeout.connect(self._apply)
 
     def set_image(self, path, mode="stretch", opacity=1.0):
         if not path:
-            self.clear(); return
+            self.clear()
+            return
         px = QPixmap(path)
-        if px.isNull(): return
+        if px.isNull():
+            return
         self._pixmap = px
         self._mode = mode if mode in BG_MODES else "stretch"
         self._apply()
@@ -25,19 +34,29 @@ class BackgroundPainter(QObject):
 
     def clear(self):
         self._pixmap = None
-        self._window.setPalette(self._original_palette)
-        self._window.setAutoFillBackground(False)
-        self._window.removeEventFilter(self)
+        self._resize_timer.stop()
+        window = self._window
+        if window:
+            window.setPalette(self._original_palette)
+            window.setAutoFillBackground(False)
+            window.removeEventFilter(self)
 
     def _apply(self):
-        if not self._pixmap: return
+        if not self._pixmap:
+            return
         win = self._window
+        if not win:
+            return
         mode = self._mode
         sz = win.size()
         if mode == "stretch":
-            scaled = self._pixmap.scaled(sz, Qt.IgnoreAspectRatio, Qt.SmoothTransformation)
+            scaled = self._pixmap.scaled(
+                sz, Qt.IgnoreAspectRatio, Qt.SmoothTransformation
+            )
         elif mode == "fit":
-            scaled = self._pixmap.scaled(sz, Qt.KeepAspectRatio, Qt.SmoothTransformation)
+            scaled = self._pixmap.scaled(
+                sz, Qt.KeepAspectRatio, Qt.SmoothTransformation
+            )
         else:
             scaled = self._pixmap
         pal = win.palette()
@@ -48,5 +67,5 @@ class BackgroundPainter(QObject):
     def eventFilter(self, obj, event):
         if obj is self._window and event.type() == QEvent.Resize:
             if self._pixmap and self._mode in ("stretch", "fit"):
-                self._apply()
+                self._resize_timer.start()
         return False
