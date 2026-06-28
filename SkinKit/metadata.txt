@@ -1,10 +1,12 @@
 [general]
 name=SkinKit
-qgisMinimumVersion=3.16
+qgisMinimumVersion=3.22
+qgisMaximumVersion=4.99
 description=Full QGIS UI customisation: QSS editor with syntax highlighting, icon packs per preset, background images, font, opacity, icon size, safe reset
-version=0.2
+version=1.0.0
 author=Wolren
-email=wolren@users.noreply.github.com
+email=wolrenn@outlook.com
+license=GPL-3.0-only
 about=SkinKit is a comprehensive QGIS UI customisation plugin. Features: built-in theme gallery, QSS syntax-highlighted editor with colour swatches and validation, per-preset icon packs (QGIS default as baseline), background image for main window, font+opacity+toolbar icon size control, named presets, safe reset that restores the previous built-in theme.
 tracker=https://github.com/Wolren/SkinKit/issues
 repository=https://github.com/Wolren/SkinKit
@@ -14,4 +16,3 @@ icon=icons/icon.png
 category=Plugins
 experimental=False
 deprecated=False
-changelog=0.2 — Renamed to SkinKit; production-readiness audit; GitHub Actions CI; debounced background/resize; preset validation; error handling overhaul

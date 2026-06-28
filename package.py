@@ -1,66 +1,47 @@
 #!/usr/bin/env python3
-"""Build a clean QGIS plugin zip for publishing."""
+"""Build the plugin zip for distribution."""
 
-import configparser
 import os
 import re
 import zipfile
+from pathlib import Path
 
-ROOT = os.path.dirname(os.path.abspath(__file__))
-PLUGIN_DIR = os.path.join(ROOT, "SkinKit")
-METADATA = os.path.join(PLUGIN_DIR, "metadata.txt")
-OUTPUT_DIR = ROOT
-
-SKIP_DIRS = {
-    "__pycache__",
-    ".git",
-    ".idea",
-    ".vscode",
-    ".ruff_cache",
-    "__MACOSX",
-}
-SKIP_FILES = {
-    ".DS_Store",
-    "Thumbs.db",
-    "*.pyc",
-    "*.pyo",
-}
+ROOT = Path(__file__).resolve().parent
 
 
-def _should_skip(name, is_dir):
-    if is_dir and name in SKIP_DIRS:
-        return True
-    if not is_dir and name in SKIP_FILES:
-        return True
-    if not is_dir and re.search(r"\.pyc$|\.pyo$", name):
-        return True
-    return False
+def get_plugin_dir() -> str:
+    """Find the plugin directory (the one with metadata.txt)."""
+    for child in ROOT.iterdir():
+        if child.is_dir() and (child / "metadata.txt").exists():
+            return child.name
+    raise FileNotFoundError("No plugin directory with metadata.txt found")
 
 
-def read_version():
-    cfg = configparser.ConfigParser()
-    cfg.read(METADATA, encoding="utf-8")
-    return cfg.get("general", "version", fallback="0.0")
+def get_version(plugin_dir: str) -> str:
+    meta = ROOT / plugin_dir / "metadata.txt"
+    m = re.search(r"^version=(.+)", meta.read_text(), re.M)
+    return m.group(1).strip() if m else "0.0.0"
 
 
-def build_zip():
-    version = read_version()
-    zip_name = f"SkinKit-{version}.zip"
-    zip_path = os.path.join(OUTPUT_DIR, zip_name)
+def build():
+    plugin = get_plugin_dir()
+    version = get_version(plugin)
+    zip_name = ROOT / f"{plugin}-{version}.zip"
 
-    with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as zf:
-        for root, dirs, files in os.walk(PLUGIN_DIR):
-            dirs[:] = [d for d in dirs if not _should_skip(d, True)]
-            for f in files:
-                if _should_skip(f, False):
-                    continue
-                full = os.path.join(root, f)
-                arcname = os.path.relpath(full, ROOT)
-                zf.write(full, arcname)
+    with zipfile.ZipFile(zip_name, "w", zipfile.ZIP_DEFLATED) as zf:
+        src = ROOT / plugin
+        for path in sorted(src.rglob("*")):
+            rel = path.relative_to(src)
+            parts = rel.parts
+            if any(p.startswith(".") or p == "__pycache__" for p in parts):
+                continue
+            if path.is_file():
+                zf.write(path, f"{plugin}/{rel}")
 
-    print(f"Created: {zip_path}")
-    return zip_path
+    size = os.path.getsize(zip_name)
+    print(f"Built: {zip_name.name}  ({size / 1024:.0f} KB)")
+    return zip_name.name
 
 
 if __name__ == "__main__":
-    build_zip()
+    build()

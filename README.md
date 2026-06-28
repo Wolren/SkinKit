@@ -3,12 +3,12 @@
 **Complete QGIS UI customisation plugin.** Successor to QSS Forge / Load-QSS.
 
 [![CI](https://github.com/Wolren/SkinKit/actions/workflows/ci.yml/badge.svg)](https://github.com/Wolren/SkinKit/actions/workflows/ci.yml)
-[![Release](https://img.shields.io/github/v/release/Wolren/SkinKit)](https://github.com/Wolren/SkinKit/releases)
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](LICENSE)
 [![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/Wolren/SkinKit/badge)](https://securityscorecards.dev/viewer/?uri=github.com/Wolren/SkinKit)
 [![Socket](https://img.shields.io/badge/Socket-Supply%20Chain%20Security-333?logo=socketdotdev)](https://socket.dev)
-[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](LICENSE)
-[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
-[![QGIS](https://img.shields.io/badge/QGIS-%E2%89%A53.16-589632)](https://qgis.org)
+[![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
+[![QGIS 3.22+](https://img.shields.io/badge/QGIS-3.22+-green)](https://qgis.org)
+[![Qt](https://img.shields.io/badge/Qt-5.x_|_6.x-green)](https://www.qt.io/)
 
 ---
 
@@ -22,8 +22,8 @@
 | **Icon Pack per Preset** | Each preset stores its own icons/ folder; blank = QGIS default icons as reference baseline |
 | **Background Image** | PNG/JPG on the main window: stretch, tile, center, fit modes (resize debounced 80 ms) |
 | **Window Icon** | Override QGIS titlebar/taskbar icon per preset |
-| **Toolbar Icon Size** | Slider 0–128 px via `QMainWindow.setIconSize()` |
-| **Window Opacity** | Slider 10–100 % |
+| **Toolbar Icon Size** | Slider 0-128 px via `QMainWindow.setIconSize()` |
+| **Window Opacity** | Slider 10-100 % |
 | **Font Override** | Family + point size |
 | **Named Presets** | All settings stored together; QGIS Default always present |
 | **Safe Reset** | Restores the QGIS built-in theme active *before* SkinKit was first used |
@@ -59,4 +59,4 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for full development guide.
 
 ## License
 
-GNU General Public License v3.0 — see [LICENSE](LICENSE).
+GNU General Public License v3.0 -- see [LICENSE](LICENSE).

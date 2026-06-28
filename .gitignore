@@ -5,33 +5,15 @@
 __pycache__/
 *.pyc
 *.pyo
-*.egg-info/
-.pytest_cache/
 .ruff_cache/
-.mypy_cache/
-
-# ── IDE / editors ────────────────────────────────────────────────────────────
+.pytest_cache/
 .idea/
 .vscode/
-*.swp
-*.swo
-*~
-*.orig
-
-# ── OS junk ──────────────────────────────────────────────────────────────────
 .DS_Store
 Thumbs.db
-Desktop.ini
-__MACOSX/
-._*
-
-# ── Virtual environments ─────────────────────────────────────────────────────
-venv/
 .venv/
+venv/
 env/
-.env/
-
-# ── Build artifacts ──────────────────────────────────────────────────────────
 dist/
 build/
-*.mo
+*.egg-info/
