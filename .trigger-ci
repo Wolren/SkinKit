@@ -1,1 +1,0 @@
-triggered $(date -u +%s)
