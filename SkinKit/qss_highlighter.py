@@ -1,6 +1,6 @@
-# -*- coding: utf-8 -*-
 """CSS/QSS syntax highlighter — colour swatches, multiline comments, line numbers."""
 
+import contextlib
 import re
 
 from qgis.PyQt.QtCore import QRegularExpression
@@ -103,7 +103,7 @@ class QSSHighlighter(QSyntaxHighlighter):
             raw = m.captured(0)
             nums = re.findall(r"[\d.]+", raw)
             if len(nums) >= 3:
-                try:
+                with contextlib.suppress(Exception):
                     self.setFormat(
                         m.capturedStart(),
                         m.capturedLength(),
@@ -111,8 +111,6 @@ class QSSHighlighter(QSyntaxHighlighter):
                             QColor(int(nums[0]), int(nums[1]), int(nums[2])).name()
                         ),
                     )
-                except Exception:
-                    pass
         self.setCurrentBlockState(0)
         start = 0
         if self.previousBlockState() != 1:

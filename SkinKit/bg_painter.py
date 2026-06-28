@@ -65,7 +65,6 @@ class BackgroundPainter(QObject):
         win.setAutoFillBackground(True)
 
     def eventFilter(self, obj, event):
-        if obj is self._window and event.type() == QEvent.Resize:
-            if self._pixmap and self._mode in ("stretch", "fit"):
-                self._resize_timer.start()
+        if obj is self._window and event.type() == QEvent.Resize and self._pixmap and self._mode in ("stretch", "fit"):
+            self._resize_timer.start()
         return False

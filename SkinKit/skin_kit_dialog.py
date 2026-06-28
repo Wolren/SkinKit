@@ -1,5 +1,6 @@
 """SkinKit — main dialog (6 tabs)."""
 
+import contextlib
 import os
 
 from qgis.PyQt.QtCore import QSize, Qt
@@ -243,7 +244,7 @@ class SkinKitDialog(QDialog):
         if qss_path and os.path.isfile(qss_path):
             self.qss_path_edit.setText(qss_path)
             try:
-                with open(qss_path, "r", encoding="utf-8") as fh:
+                with open(qss_path, encoding="utf-8") as fh:
                     self.qss_editor.setPlainText(fh.read())
             except (OSError, UnicodeDecodeError) as e:
                 self.iface.messageBar().pushWarning(
@@ -484,21 +485,15 @@ class SkinKitDialog(QDialog):
         idx = self.bg_mode.findText(cfg.get("bg_mode", "stretch"))
         if idx >= 0:
             self.bg_mode.setCurrentIndex(idx)
-        try:
+        with contextlib.suppress(ValueError, TypeError):
             self.bg_op_sl.setValue(int(float(cfg.get("bg_opacity", 1.0)) * 100))
-        except (ValueError, TypeError):
-            pass
-        try:
+        with contextlib.suppress(ValueError, TypeError):
             self.opacity_sl.setValue(int(float(cfg.get("opacity", 1.0)) * 100))
-        except (ValueError, TypeError):
-            pass
         fam = cfg.get("font_family", "")
         if fam:
             self.font_combo.setCurrentFont(QFont(fam))
-        try:
+        with contextlib.suppress(ValueError, TypeError):
             self.font_sz.setValue(int(cfg.get("font_size", 0)))
-        except (ValueError, TypeError):
-            pass
 
     def _collect_cfg(self):
         return {
@@ -527,7 +522,7 @@ class SkinKitDialog(QDialog):
         p = self.qss_path_edit.text().strip()
         if p and os.path.isfile(p):
             try:
-                with open(p, "r", encoding="utf-8") as fh:
+                with open(p, encoding="utf-8") as fh:
                     self.qss_editor.setPlainText(fh.read())
             except (OSError, UnicodeDecodeError) as e:
                 self.iface.messageBar().pushWarning(
@@ -641,21 +636,15 @@ class SkinKitDialog(QDialog):
         idx = self.bg_mode.findText(cfg.get("bg_mode", "stretch"))
         if idx >= 0:
             self.bg_mode.setCurrentIndex(idx)
-        try:
+        with contextlib.suppress(ValueError, TypeError):
             self.bg_op_sl.setValue(int(float(cfg.get("bg_opacity", 1.0)) * 100))
-        except (ValueError, TypeError):
-            pass
-        try:
+        with contextlib.suppress(ValueError, TypeError):
             self.opacity_sl.setValue(int(float(cfg.get("opacity", 1.0)) * 100))
-        except (ValueError, TypeError):
-            pass
         fam = cfg.get("font_family", "")
         if fam:
             self.font_combo.setCurrentFont(QFont(fam))
-        try:
+        with contextlib.suppress(ValueError, TypeError):
             self.font_sz.setValue(int(cfg.get("font_size", 0) or 0))
-        except (ValueError, TypeError):
-            pass
 
     def _load_preset_ui(self):
         name = self.preset_combo.currentText()

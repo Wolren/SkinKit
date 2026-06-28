@@ -114,7 +114,7 @@ class SkinKit:
         combined = ""
         if qss_path and os.path.isfile(qss_path):
             try:
-                with open(qss_path, "r", encoding="utf-8") as fh:
+                with open(qss_path, encoding="utf-8") as fh:
                     combined = fh.read()
                 if icon_pack and os.path.isdir(icon_pack):
                     combined = combined.replace("url(icons/", f"url({icon_pack}/")
@@ -290,7 +290,7 @@ class SkinKit:
             self._watcher.addPath(path)
         cfg = self.load_settings()
         try:
-            with open(path, "r", encoding="utf-8") as fh:
+            with open(path, encoding="utf-8") as fh:
                 combined = fh.read()
             ip = cfg.get("icon_pack_dir", "")
             if ip and os.path.isdir(ip):
