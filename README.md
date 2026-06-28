@@ -4,8 +4,11 @@
 
 [![CI](https://github.com/Wolren/SkinKit/actions/workflows/ci.yml/badge.svg)](https://github.com/Wolren/SkinKit/actions/workflows/ci.yml)
 [![Release](https://img.shields.io/github/v/release/Wolren/SkinKit)](https://github.com/Wolren/SkinKit/releases)
-[![QGIS](https://img.shields.io/badge/QGIS-%E2%89%A53.16-589632)](https://qgis.org)
+[![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/Wolren/SkinKit/badge)](https://securityscorecards.dev/viewer/?uri=github.com/Wolren/SkinKit)
+[![Socket](https://img.shields.io/badge/Socket-Supply%20Chain%20Security-333?logo=socketdotdev)](https://socket.dev)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](LICENSE)
+[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
+[![QGIS](https://img.shields.io/badge/QGIS-%E2%89%A53.16-589632)](https://qgis.org)
 
 ---
 
