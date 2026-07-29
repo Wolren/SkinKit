@@ -22,21 +22,21 @@ jobs:
       - name: Install ruff
         run: pip install ruff
       - name: Lint plugin source
-        run: ruff check $PLUGIN_DIR/
+        run: ruff check "$PLUGIN_DIR/"
       - name: Validate metadata.txt
         run: |
-          if [ ! -f $PLUGIN_DIR/metadata.txt ]; then
+          if [ ! -f "$PLUGIN_DIR/metadata.txt" ]; then
             echo "::error file=$PLUGIN_DIR/metadata.txt::$PLUGIN_DIR/metadata.txt not found"
             exit 1
           fi
-          grep -q "^name=" $PLUGIN_DIR/metadata.txt \
-            || echo "::warning file=$PLUGIN_DIR/metadata.txt::Missing 'name'"
-          grep -q "^version=" $PLUGIN_DIR/metadata.txt \
-            || echo "::warning file=$PLUGIN_DIR/metadata.txt::Missing 'version'"
-          grep -q "^qgisMinimumVersion=" $PLUGIN_DIR/metadata.txt \
-            || echo "::warning::Missing 'qgisMinimumVersion'"
-          grep -q "^description=" $PLUGIN_DIR/metadata.txt \
-            || echo "::warning::Missing 'description'"
+          grep -q "^name=" "$PLUGIN_DIR/metadata.txt" \
+            || { echo "::error file=$PLUGIN_DIR/metadata.txt::Missing 'name'"; exit 1; }
+          grep -q "^version=" "$PLUGIN_DIR/metadata.txt" \
+            || { echo "::error file=$PLUGIN_DIR/metadata.txt::Missing 'version'"; exit 1; }
+          grep -q "^qgisMinimumVersion=" "$PLUGIN_DIR/metadata.txt" \
+            || { echo "::error::Missing 'qgisMinimumVersion'"; exit 1; }
+          grep -q "^description=" "$PLUGIN_DIR/metadata.txt" \
+            || { echo "::error::Missing 'description'"; exit 1; }
           echo "metadata.txt validation complete"
 
   package:
@@ -50,7 +50,7 @@ jobs:
             python package.py
             echo "Package built successfully"
           else
-            cd $PLUGIN_DIR && zip -r ../$PLUGIN_DIR.zip . && cd ..
+            cd "$PLUGIN_DIR" && zip -r "../$PLUGIN_DIR.zip" . && cd ..
             echo "Zipped plugin directory"
           fi
       - name: Verify zip structure
@@ -75,6 +75,7 @@ jobs:
         qgis_version:
           - "3.22-focal"
           - "stable"
+          - "4.2-trixie"
           - "latest"
     steps:
       - uses: actions/checkout@v7
@@ -96,8 +97,8 @@ jobs:
           PYEOF
 
           docker run --rm \
-            -v $PWD:/plugin \
-            -e PLUGIN_DIR=$PLUGIN_DIR \
+            -v "$PWD":/plugin \
+            -e "PLUGIN_DIR=$PLUGIN_DIR" \
             -e QT_QPA_PLATFORM=offscreen \
             -v /tmp/test_plugin.py:/test_plugin.py \
             qgis/qgis:${{ matrix.qgis_version }} \
@@ -111,13 +112,13 @@ jobs:
               mkdir -p /root/.local/share/QGIS/QGIS3/profiles/default/python/plugins
               ln -s /plugin/\$PLUGIN_DIR /root/.local/share/QGIS/QGIS3/profiles/default/python/plugins/\$PLUGIN_DIR
               echo '=== Plugin import test ==='
-              python3 /test_plugin.py || echo '::warning::Plugin import test failed'
+              python3 /test_plugin.py || { echo '::error::Plugin import test failed'; exit 1; }
               if [ -d /plugin/tests ]; then
                 echo ''
                 echo '=== Running tests in QGIS ${{ matrix.qgis_version }} ==='
                 cd /plugin
                 python3 -m pytest tests/ -v --tb=short -p no:cacheprovider \
-                  || echo '::warning::Some tests failed in QGIS ${{ matrix.qgis_version }}'
+                  || { echo '::error::Some tests failed in QGIS ${{ matrix.qgis_version }}'; exit 1; }
               else
                 echo 'No tests/ directory - import check only'
               fi
