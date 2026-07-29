@@ -1,3 +1,6 @@
+"""SkinKit — QGIS UI customisation plugin."""
+
+
 def classFactory(iface):
     from .skin_kit import SkinKit
 
