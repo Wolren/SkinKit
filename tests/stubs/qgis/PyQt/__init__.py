@@ -1,0 +1,1 @@
+"""Stub qgis.PyQt package."""
