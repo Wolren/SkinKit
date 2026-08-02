@@ -1,6 +1,6 @@
 [project]
 name = "skinkit"
-version = "1.0.0"
+version = "1.0.2"
 description = "Full QGIS UI customisation plugin"
 requires-python = ">=3.9"
 
