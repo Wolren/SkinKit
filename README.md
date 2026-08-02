@@ -1,10 +1,10 @@
 [![CI](https://github.com/Wolren/SkinKit/actions/workflows/ci.yml/badge.svg)](https://github.com/Wolren/SkinKit/actions/workflows/ci.yml)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](LICENSE)
+[![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/Wolren/SkinKit/badge)](https://securityscorecards.dev/viewer/?uri=github.com/Wolren/SkinKit)
+[![Socket](https://img.shields.io/badge/Socket-Supply%20Chain%20Security-333?logo=socketdotdev)](https://socket.dev)
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
 [![QGIS 3.22+](https://img.shields.io/badge/QGIS-3.22+-green)](https://qgis.org)
 [![Qt](https://img.shields.io/badge/Qt-5.x_|_6.x-green)](https://www.qt.io/)
-[![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/Wolren/SkinKit/badge)](https://securityscorecards.dev/viewer/?uri=github.com/Wolren/SkinKit)
-[![Socket](https://img.shields.io/badge/Socket-Supply%20Chain%20Security-333?logo=socketdotdev)](https://socket.dev)
 
 # SkinKit
 
@@ -48,6 +48,17 @@
 | Windows | `%APPDATA%\QGIS\QGIS3\profiles\default\python\plugins\` |
 
 Or download `SkinKit-<version>.zip` from [Releases](https://github.com/Wolren/SkinKit/releases) and unzip into that folder.
+
+---
+
+## Compatibility
+
+| QGIS version | Qt | Python | Status |
+|---|---|---|---|
+| 3.22 LTR | Qt5 | 3.9+ | Tested in CI |
+| 3.x stable | Qt5/Qt6 | 3.9+ | Tested in CI |
+| 4.2 | Qt6 | 3.12+ | Tested in CI |
+| 4.x latest | Qt6 | 3.12+ | Tested in CI |
 
 ---
 
